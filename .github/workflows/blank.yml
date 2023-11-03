@@ -41,7 +41,9 @@ jobs:
             const owner = "michelle-yooh"
             const repo = "test"
             const pr = context.payload.pull_request
-            console.log(pr.commits)
+            console.log("----------------------")
+            console.log(pr._links.commits)
+            console.log("----------------------")
             const pull_number = pr.number
 
             let reviews = await github.rest.pulls.listReviews({
@@ -61,5 +63,12 @@ jobs:
                 repo,
               })
             }
-            
+            const commits = await github.pulls.listCommits({
+              owner,
+              repo,
+              pull_number,
+            })
+            console.log("----------------------")
+            console.log(commits)
+            console.log("----------------------")
             
