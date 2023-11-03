@@ -45,5 +45,5 @@ jobs:
                 labels: ["pull ready"],
                 owner,
                 repo,
-            }
+            })
             
