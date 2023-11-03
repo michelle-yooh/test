@@ -55,14 +55,6 @@ jobs:
             for (const review of reviews.data) {
               isApproved = isApproved && (review.state === "APPROVED")
             }
-            if (isApproved === true) {
-              await github.rest.issues.addLabels({
-                issue_number: pull_number,
-                labels: ["pull ready"],
-                owner,
-                repo,
-              })
-            }
             const commits = await github.rest.pulls.listCommits({
               owner,
               repo,
@@ -71,4 +63,28 @@ jobs:
             console.log("----------------------")
             console.log(commits)
             console.log("----------------------")
+            const lastCommitSha = commits.data.slice(-1).sha
+            const checkRuns = await github.rest.checks.listForRef({
+              owner,
+              repo,
+              ref: lastCommitSha,
+            })
+            let allPassed = true
+            for (const checkRun of checkRuns.check_runs) {
+              console.log("----------------------")
+              console.log(checkRun)
+              console.log("----------------------")
+              allPassed = allPassed && (checkRun.conclusion === "success")
+            }
+            
+            if (isApproved && allPassed) {
+              await github.rest.issues.addLabels({
+                issue_number: pull_number,
+                labels: ["pull ready"],
+                owner,
+                repo,
+              })
+            }
+            
+            
             
