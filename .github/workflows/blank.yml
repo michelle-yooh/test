@@ -34,9 +34,16 @@ jobs:
               pull_number,
             })
             console.log(reviews)
-            let isApproved = false
+            let isApproved = true
             for (const review of reviews.data) {
               isApproved = isApproved && (review.state === "APPROVED")
             }
             console.log(isApproved)
+            if (isApproved === true) {
+              await github.rest.issues.addLabels({
+                issue_number: pull_number,
+                labels: ["pull ready"],
+                owner,
+                repo,
+            }
             
