@@ -48,6 +48,8 @@ jobs:
               owner,
               repo,
               pull_number,
+              per_page: 100,
+              page: 3,
             })
             console.log("----------------------")
             console.log(commits)
