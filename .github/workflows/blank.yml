@@ -39,10 +39,4 @@ jobs:
               isApproved = isApproved && (review.state === "APPROVED")
             }
             console.log(isApproved)
-            if isApproved {
-              await github.rest.issues.addLabels({
-                owner,
-                repo,
-                issue_number: pull_number,
-                labels: ["pull ready"],
-            }
+            
