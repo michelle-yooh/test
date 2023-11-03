@@ -63,7 +63,7 @@ jobs:
                 repo,
               })
             }
-            const commits = await github.pulls.listCommits({
+            const commits = await github.rest.pulls.listCommits({
               owner,
               repo,
               pull_number,
