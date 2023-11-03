@@ -47,19 +47,11 @@ jobs:
               repo,
               pull_number,
             })
-            let numApproved = 0
             let isApproved = true
             for (const review of reviews.data) {
               isApproved = isApproved && (review.state === "APPROVED")
-              numApproved += 1
             }
-            const branchProtection = await github.rest.repos.getBranchProtection({
-              owner,
-              repo,
-              branch: "main",
-            })
-            const numRequiredApprovals = branchProtection.required_pull_request_reviews.required_approving_review_count
-            if (numApproved >= numRequiredApprovals) {
+            if (isApproved === true) {
               await github.rest.issues.addLabels({
                 issue_number: pull_number,
                 labels: ["pull ready"],
