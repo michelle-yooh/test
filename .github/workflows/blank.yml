@@ -47,7 +47,7 @@ jobs:
               repo,
               pull_number,
             })
-            let numApporved = 0
+            let numApproved = 0
             let isApproved = true
             for (const review of reviews.data) {
               isApproved = isApproved && (review.state === "APPROVED")
