@@ -15,8 +15,19 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     permissions:
+      actions: read
+      checks: read
+      contents: read
+      deployments: read
+      id-token: read
+      issues: read
+      discussions: read
+      packages: read
+      pages: read
       pull-requests: write
       repository-projects: read
+      security-events: read
+      statuses: read
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -30,25 +41,25 @@ jobs:
             const repo = "test"
             const pr = context.payload.pull_request
             const pull_number = pr.number
-            console.log(pr)
+
             let reviews = await github.rest.pulls.listReviews({
               owner,
               repo,
               pull_number,
             })
-            console.log(reviews)
+            let numApporved = 0
             let isApproved = true
             for (const review of reviews.data) {
               isApproved = isApproved && (review.state === "APPROVED")
+              numApproved += 1
             }
             const branchProtection = await github.rest.repos.getBranchProtection({
               owner,
               repo,
               branch: "main",
             })
-            console.log(branchProtection)
-            console.log(isApproved)
-            if (isApproved === true) {
+            const numRequiredApprovals = branchProtection.required_pull_request_reviews.required_approving_review_count
+            if (numApproved >= numRequiredApprovals) {
               await github.rest.issues.addLabels({
                 issue_number: pull_number,
                 labels: ["pull ready"],
