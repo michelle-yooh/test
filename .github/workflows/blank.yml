@@ -23,7 +23,8 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            const owner, repo = "michelle-yooh", "test"
+            const owner = "michelle-yooh"
+            const repo = "test"
             const pr = context.payload.pull_request
             const pull_number = pr.number
             console.log(pr)
