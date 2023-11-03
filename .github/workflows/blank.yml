@@ -63,7 +63,11 @@ jobs:
             console.log("----------------------")
             console.log(commits)
             console.log("----------------------")
-            const lastCommitSha = commits.data.slice(-1).sha
+            const lastCommitSha = commits.data.slice(-1)[0].sha
+            console.log("----------------------")
+            console.log(lastCommitSha)
+            console.log("----------------------")
+            
             const checkRuns = await github.rest.checks.listForRef({
               owner,
               repo,
