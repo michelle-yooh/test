@@ -40,6 +40,15 @@ jobs:
             for (const review of reviews.data) {
               isApproved = isApproved && (review.state === "APPROVED")
             }
+            const branchProtection = await octokit.request('GET /repos/{owner}/{repo}/branches/{branch}/protection', {
+              owner,
+              repo,
+              branch: 'main',
+              headers: {
+                'X-GitHub-Api-Version': '2022-11-28'
+              }
+            })
+            console.log(branchProtection
             console.log(isApproved)
             if (isApproved === true) {
               await github.rest.issues.addLabels({
