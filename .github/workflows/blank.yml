@@ -27,9 +27,9 @@ jobs:
             const pr = context.payload.pull_request
             const pull_number = pr.number
             console.log(pr)
-            const reviews = github.rest.pulls.listReviews({
+            const reviews = await github.rest.pulls.listReviews({
               owner,
               repo,
-              pull_number
+              pull_number,
             })
             console.log(reviews)
