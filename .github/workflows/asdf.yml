@@ -20,10 +20,6 @@ jobs:
        run: echo hello
   add_label:
     needs: another_build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: ./.github/workflows/blank.yml
+    uses: ./.github/workflows/blank.yml
 
             
