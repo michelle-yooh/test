@@ -15,10 +15,7 @@
 name: Add pull ready on approve
 
 on:
-  workflow_run:
-    types: [completed]
-  check_run:
-    types: [completed]
+  workflow_call:
   pull_request_review:
   workflow_dispatch:
 
