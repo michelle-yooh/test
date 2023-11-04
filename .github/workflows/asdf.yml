@@ -18,6 +18,8 @@ jobs:
     steps:
      - name: hello
        run: echo hello
+     - name: Checkout
+       uses: actions/checkout@v4
   add_label:
     needs: another_build
     runs-on: ubuntu-latest
