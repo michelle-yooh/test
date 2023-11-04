@@ -19,6 +19,9 @@ jobs:
      - name: hello
        run: echo hello
   add_label:
+    permissions:
+      checks: read
+      pull-requests: write
     needs: another_build
     uses: ./.github/workflows/blank.yml
 
