@@ -31,8 +31,8 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            const owner = "google"
-            const repo = "maxtext"
+            const owner = "michelle-yooh"
+            const repo = "test"
             const pull_number = context.payload.pull_request.number
 
             const reviews = await github.rest.pulls.listReviews({
