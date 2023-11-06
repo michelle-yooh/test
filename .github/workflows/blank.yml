@@ -65,8 +65,8 @@ jobs:
               process.exit(0)
             }
             for (const checkRun of checkRuns.data.check_runs) {
-              console.log("github action is ", github.action)
-              if (checkRun.name === github.action) continue
+              console.log("github action is ", context.github.action)
+              if (checkRun.name === context.github.action) continue
               if (checkRun.conclusion !== "success") {
                 console.log("Not adding pull ready because " + checkRun.name + " has not passed yet")
                 process.exit()
