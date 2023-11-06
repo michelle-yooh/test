@@ -62,10 +62,10 @@ jobs:
             })
             if (checkRuns.data.check_runs.length === 0) {
               console.log("No check runs associated with the last commit " + ref +"\nNot adding pull ready")
-              process.exit(0)
+              process.exit()
             }
             for (const checkRun of checkRuns.data.check_runs) {
-              console.log("github is ", context.github)
+              console.log("context is ", context)
               console.log("github is ", context.action)
               if (checkRun.name === context.action) continue
               if (checkRun.conclusion !== "success") {
