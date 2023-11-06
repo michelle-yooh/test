@@ -43,6 +43,7 @@ jobs:
             for (const review of reviews.data) {
               if (review.state !== "APPROVED") {
                 console.log("Not adding pull ready because the PR is not approved")
+                console.log("The following review is pending")
                 process.exit()
               }
             }
