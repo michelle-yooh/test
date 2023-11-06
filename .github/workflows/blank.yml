@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Add pull ready on approve
+name: Add Label
 
 on:
   workflow_call:
@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  AddLabel:
+  AddPullReady:
     if: github.ref != 'refs/heads/main'
     permissions:
       checks: read
@@ -35,14 +35,16 @@ jobs:
             const repo = "test"
             const pull_number = context.payload.pull_request.number
 
-            let isApproved = true
             const reviews = await github.rest.pulls.listReviews({
               owner,
               repo,
               pull_number,
             })
             for (const review of reviews.data) {
-              isApproved = isApproved && (review.state === "APPROVED")
+              if (review.state !== "APPROVED") {
+                console.log("Not adding pull ready because the PR is not approved")
+                process.exit()
+              }
             }
 
             let allPassed = true
@@ -52,25 +54,28 @@ jobs:
               pull_number,
               per_page: 100,
             })
+            const ref = commits.data.slice(-1)[0].sha
             const checkRuns = await github.rest.checks.listForRef({
               owner,
               repo,
-              ref: commits.data.slice(-1)[0].sha,
+              ref,
             })
+            if (checkRuns.data.check_runs.length === 0) {
+              console.log("No check runs associated with the last commit " + ref +"\nNot adding pull ready")
+              process.exit(0)
+            }
             for (const checkRun of checkRuns.data.check_runs) {
-              console.log("_________________")
-              console.log(checkRun)
-              console.log("_________________")
-              if (checkRun.name === "AddLabel") continue
-              allPassed = allPassed && (checkRun.conclusion === "success")
+              if (checkRun.name === "AddPullReady") continue
+              if (checkRun.conclusion !== "success") {
+                console.log("Not adding pull ready because " + checkRun.name + " has not passed yet")
+                process.exit()
+              }
             }
-
-            if (isApproved && allPassed) {
-              await github.rest.issues.addLabels({
-                issue_number: pull_number,
-                labels: ["pull ready"],
-                owner,
-                repo,
-              })
-            }
+            console.log("Adding pull ready label because the PR is approved AND all the check runs have passed")
+            await github.rest.issues.addLabels({
+              issue_number: pull_number,
+              labels: ["pull ready"],
+              owner,
+              repo,
+            })
             
