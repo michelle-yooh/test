@@ -15,7 +15,11 @@
 name: Add Label
 
 on:
-  workflow_call:
+  workflow_run:
+    workflows: [TEST]
+    types:
+      - completed
+  # workflow_call:
   pull_request_review:
   workflow_dispatch:
 
