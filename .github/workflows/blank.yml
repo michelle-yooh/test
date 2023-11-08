@@ -38,6 +38,7 @@ jobs:
             const owner = "michelle-yooh"
             const repo = "test"
             let pull_number = -1
+            console.log(context.payload)
             if (context.payload.pull_request !== undefined) {
               pull_number = context.payload.pull_request.number
             } else if (context.payload.workflow_run !== undefined) {
