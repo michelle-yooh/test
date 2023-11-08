@@ -16,7 +16,7 @@ name: Add Label
 
 on:
   workflow_run:
-    workflows: [TEST]
+    workflows: [TEST, CodeQL]
     types:
       - completed
   # workflow_call:
