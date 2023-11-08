@@ -37,8 +37,18 @@ jobs:
           script: |
             const owner = "michelle-yooh"
             const repo = "test"
-            const pull_number = context.payload.pull_request.number
-
+            let pull_number = -1
+            console.log(context.payload)
+            if (context.payload.pull_request !== undefined) {
+              pull_number = context.payload.pull_request.number
+            } else if (context.payload.workflow_run !== undefined) {
+              console.log(context.payload.workflow_run.pull_requests)
+              pull_number = context.payload.workflow_run.pull_requests[0].number
+            } else {
+              console.log("This workflow is running in an invalid context")
+              process.exit(1)
+            }
+            
             const reviews = await github.rest.pulls.listReviews({
               owner,
               repo,
@@ -83,4 +93,5 @@ jobs:
               owner,
               repo,
             })
+
             
