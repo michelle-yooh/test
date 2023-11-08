@@ -56,7 +56,7 @@ jobs:
 
             const reviewers = await github.rest.pulls.listRequestedReviewers({ owner, repo, pull_number, })
             // Once a requested reviewer submits a review, they are no longer considered a requested reviewer.
-            if (reviewers.data.users.length !== 0 && reviewers.data.teams.length !== 0) {
+            if (reviewers.data.users.length !== 0 || reviewers.data.teams.length !== 0) {
               console.log("Not adding pull ready because the PR is not approved yet")
               process.exit()
             }
@@ -67,7 +67,7 @@ jobs:
               pull_number,
             })
             for (const review of reviews.data) {
-              if (review.state !== "APPROVED" || review.state !== "COMMENTED") {
+              if (review.state !== "APPROVED" && review.state !== "COMMENTED") {
                 console.log("Not adding pull ready because the review is requesting a change: ", review.html_url)
                 console.log(review)
                 process.exit()
